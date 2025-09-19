@@ -388,7 +388,7 @@ static int setup_recv_ring(struct io_uring *ring, struct conn *c)
 	ptr = cbr->buf;
 	for (i = 0; i < nr_bufs; i++) {
 		vlog("%d: add bid %d, data %p\n", c->tid, i, ptr);
-		io_uring_buf_ring_add(cbr->br, ptr, buf_size, i, br_mask, i);
+		io_uring_buf_ring_add(cbr->br, ptr, buf_size, i, br_mask, i);  // 接收数据
 		ptr += buf_size;
 	}
 	io_uring_buf_ring_advance(cbr->br, nr_bufs);
@@ -459,7 +459,7 @@ static int setup_buffer_rings(struct io_uring *ring, struct conn *c)
 	c->out_br.bgid = cur_bgid++;
 	c->out_br.br = NULL;
 
-	ret = setup_recv_ring(ring, c);
+	ret = setup_recv_ring(ring, c);  // 接收数据
 	if (ret)
 		return ret;
 	if (is_sink)
@@ -2298,7 +2298,7 @@ static void *thread_main(void *data)
 	if (ret)
 		goto done;
 
-	if (setup_buffer_rings(&c->ring, c))
+	if (setup_buffer_rings(&c->ring, c))  // 读取数据
 		goto done;
 
 	/*
